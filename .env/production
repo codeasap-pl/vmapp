@@ -1,0 +1,2 @@
+DJANGO_SETTINGS_MODULE='vmapp.settings.production'
+SQLITE_DB_PATH='/srv/vmapp/db/vmapp.db'

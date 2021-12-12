@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+set -u
+
+ENV=${1:-development}
+test $# -gt 0 && shift || true
+
+. .env/$ENV
+DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE} \
+SQLITE_DB_PATH=${SQLITE_DB_PATH} \
+    python3 vmapp/manage.py $@

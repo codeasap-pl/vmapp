@@ -1,0 +1,2 @@
+DJANGO_SETTINGS_MODULE='vmapp.settings.development'
+SQLITE_DB_PATH='.ignore/development.sqlite3'

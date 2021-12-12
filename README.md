@@ -2,4 +2,4 @@
 
 Django application for managing accounts/domains/aliases.
 
-[PL] [PL](https://blog.codeasap.pl/posts/vmapp/1-setup/)
+[PL] [https://blog.codeasap.pl/posts/vmapp/1-setup/](https://blog.codeasap.pl/posts/vmapp/1-setup/)

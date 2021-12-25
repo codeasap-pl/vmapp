@@ -2,5 +2,8 @@
 __pycache__/
 .ignore/
 .secure/
+/htmlcov
+
+.coverage
 *#*
 *.bak

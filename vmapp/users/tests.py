@@ -154,3 +154,14 @@ class TestUsers(TestCase):
         self.assertEqual(user.email(), expected, "email()")
         self.assertEqual(str(user), expected, "__str__()")
         self.assertEqual(str(user), user.email(), "__str__() calls email()")
+
+    def test_unique_violation(self):
+        domain = Domain.objects.create(domain="test-unique.localhost")
+        values = dict(
+            domain=domain,
+            username="test-unique",
+            password="test-unique-password",
+        )
+        User.objects.create(**values)
+        with self.assertRaises(IntegrityError):
+            User.objects.create(**values)

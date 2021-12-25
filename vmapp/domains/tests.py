@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.db.utils import IntegrityError
 from django.core.validators import ValidationError
 
 from domains.models import Domain
@@ -37,3 +38,16 @@ class TestDomains(TestCase):
         domain.save()
         self.assertEqual(domain.domain, fqdn, "is_enabled")
         self.assertFalse(domain.is_enabled, "is_enabled")
+
+    def test_unique_violation(self):
+        values = dict(
+            domain="test-unique-domain.localhost"
+        )
+        Domain.objects.create(**values)
+        with self.assertRaises(IntegrityError):
+            Domain.objects.create(**values)
+
+    def test_str(self):
+        fqdn = "test-str-domain@localhost"
+        domain = Domain.objects.create(domain=fqdn)
+        self.assertEqual(str(domain), fqdn, "__str__")

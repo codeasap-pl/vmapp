@@ -1,5 +1,6 @@
 from django.db import models
 from common.models import BaseModel
+from django.core.validators import MinLengthValidator
 
 
 class Alias(BaseModel):
@@ -10,6 +11,10 @@ class Alias(BaseModel):
             ["email", "alias"]
         ]
 
-    email = models.EmailField(null=False, max_length=255)
-    alias = models.EmailField(null=False, max_length=255)
+    email = models.EmailField(null=False, blank=False,
+                              validators=[MinLengthValidator(3)],
+                              max_length=255)
+    alias = models.EmailField(null=False, blank=False,
+                              validators=[MinLengthValidator(3)],
+                              max_length=255)
     is_enabled = models.BooleanField(default=True)

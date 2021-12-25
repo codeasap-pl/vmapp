@@ -1,5 +1,8 @@
 import crypt
 from django.db import models
+from django.core.validators import MinLengthValidator
+from django.core.validators import MinValueValidator
+
 from common.models import BaseModel
 from domains.models import Domain
 
@@ -12,9 +15,15 @@ class User(BaseModel):
         ]
 
     domain = models.ForeignKey(Domain, on_delete=models.CASCADE)
-    username = models.CharField(null=False, max_length=64)
-    password = models.CharField(null=False, max_length=256)
-    quota = models.PositiveIntegerField(default=134217728)
+    username = models.CharField(null=False,
+                                blank=False,
+                                validators=[MinLengthValidator(1)],
+                                max_length=64)
+    password = models.CharField(null=False, blank=False,
+                                validators=[MinLengthValidator(8)],
+                                max_length=256)
+    quota = models.PositiveIntegerField(default=134217728,
+                                        validators=[MinValueValidator(0)])
     is_enabled = models.BooleanField(default=True)
 
     @classmethod

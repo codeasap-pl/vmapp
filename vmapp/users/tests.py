@@ -142,6 +142,43 @@ class TestUsers(TestCase):
             "Crypted, salted, SHA-512"
         )
 
+    def test_hashed_password(self):
+        password = "test-hashed-password"
+        domain = Domain.objects.create(domain="test-hashed-password.localhost")
+        user = User.objects.create(
+            domain=domain,
+            username="test-hashed-password",
+            password=password,
+            quota=123456,
+        )
+
+        user.refresh_from_db()
+
+        self.assertNotIn(user.password, password, "Hashed")
+        hashed = user.password
+        self.assertTrue(
+            hashed.startswith("{SHA512-CRYPT}$6$"),
+            "Crypted, salted, SHA-512"
+        )
+        self.assertNotIn(user.password, password, "Hashed")
+        # UPDATE RECORD, password should not be changed.
+        user.quota = 123
+        user.save()
+        user.refresh_from_db()
+        self.assertEqual(user.password, hashed, "Hashed passw does not change")
+
+        # Change password.
+        new_password = password + password
+        user.password = new_password
+        user.save()
+        user.refresh_from_db()
+        self.assertNotEqual(user.password, hashed, "Hashed changed OK")
+        self.assertNotIn(user.password, new_password, "Updated and hashed")
+        self.assertTrue(
+            user.password.startswith("{SHA512-CRYPT}$6$"),
+            "Crypted, salted, SHA-512"
+        )
+
     def test_str(self):
         domain = Domain.objects.create(domain="test-str.localhost")
         user = User.objects.create(
